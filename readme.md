@@ -49,4 +49,4 @@ All services are connected via the `nginx-reverse-proxy-node` bridge network.
 
 ```bash
 docker-compose down
-```# nginx-reverse-proxy-node-mysql
+```
