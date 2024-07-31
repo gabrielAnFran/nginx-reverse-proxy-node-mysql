@@ -1,5 +1,3 @@
-docker network create nginx-reverse-proxy-node 
-
 # Nginx Reverse Proxy with Node.js and MySQL
 
 This project sets up a containerized environment with Nginx as a reverse proxy, a Node.js application, and a MySQL database.
