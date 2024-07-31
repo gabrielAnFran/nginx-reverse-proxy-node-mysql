@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    ports:
+      - '8080:80'
+    depends_on:
+      - app
+    networks:
+      - nginx-reverse-proxy-node
+
+  app:
+    build:
+      context: ./node
+      dockerfile: Dockerfile
+    container_name: app
+    volumes:
+      - ./node:/usr/src/app
+    entrypoint: dockerize -wait tcp://db:3306 -timeout 20s sh -c "npm install && npm run start"
+    tty: true
+    depends_on:
+      - db
+    networks:
+      - nginx-reverse-proxy-node
+
+  db:
+    image: mysql:8.0
+    container_name: db
+    restart: unless-stopped
+    volumes:
+      - ./node/.docker/mysql:/docker-entrypoint-initdb.d
+    environment:
+      - MYSQL_DATABASE=fullcycle
+      - MYSQL_ROOT_PASSWORD=password
+    networks:
+      - nginx-reverse-proxy-node
+
+networks:
+  nginx-reverse-proxy-node:
+    driver: bridge
+
+volumes:
+  mysql-data:
